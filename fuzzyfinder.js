@@ -17,7 +17,12 @@ class FuzzyFinder {
    * Check if a string matches another string, and eventually
    * return the highlighted and scored result.
    */
-  match(search, string, shouldHighlight = true) {
+  match(search, subject, options = {}) {
+    // Eventually extract the search field if there is a need
+    let getter = options.getter || (val => val);
+    let string = getter(subject);
+
+    // Early return in easy cases
     if(!search.length || !string.length)
       return false;
 
@@ -42,7 +47,7 @@ class FuzzyFinder {
       // We reached the end of the search string and matched
       // every character
       if(currentIndex == search.length)
-        return this.buildSearchResult(string, matchesIndices, shouldHighlight);
+        return this.buildSearchResult(subject, matchesIndices, options);
     }
 
     return false;
@@ -51,22 +56,33 @@ class FuzzyFinder {
   /**
    * Highlight and compute the score of a given match
    */
-  buildSearchResult(string, matchesIndices, shouldHighlight = true) {
-    return {
+  buildSearchResult(subject, matchesIndices, options = {}) {
+    let getter = options.getter || (val => val);
+    let shouldHighlight = options.highlight || false;
+    let shouldOutputFull = options.outputFull || false;
+
+    let string = getter(subject);
+
+    let res = {
       score: this.computeScore(string, matchesIndices),
       text: shouldHighlight ? this.computeHighlight(string, matchesIndices) : string,
     };
+
+    if(shouldOutputFull)
+      res.subject = subject;
+
+    return res;
   }
 
   /**
    * Perform a fuzzy-finder search on an array of strings and
    * eventually highlights the matches
    */
-  search(needle, haystack, shouldHighlight = true) {
-    return haystack.map(str => this.match(needle, str, shouldHighlight))
+  search(needle, haystack, options = {}) {
+    return haystack.map(subject => this.match(needle, subject, options))
+                   .filter(_ => _) // Remove falsy results
                    .sort((a, b) => a.score - b.score)
-                   .filter(obj => obj.score > 0)
-                   .map(obj => obj.text);
+                   .filter(obj => obj.score > 0);
   }
 
   /**
