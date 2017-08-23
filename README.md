@@ -44,22 +44,24 @@ let results = ff.search('abs', data);
 ## API
 
 ### Methods configuration
-A configuration object can be passed to both `search` and `match` methods:
+A configuration object can be passed to both `search` and `match` methods.
+Here is the default one:
 ```javascript
 {
   highlight: false, // Generate the highlighted subject ?
-  outputFull: true, // Output the whole subject ?
-  getter: obj => obj.name, // The getter method allowing to extract the string from the subject
+  outputFull: false, // Output the whole subject ?
+  getter: obj => obj, // The getter method allowing to extract the string from the subject
 }
 ```
 
 #### `{ highlight: true, ... }`
 Enables the highlighting on the output.
-Only the `text` field will be applied, the `subject` object, if passed, will be passed unaltered.
+Only the `text` field will be highlighted, the `subject` object, if passed, will be returned unaltered.
 
 #### `{ outputFull: true, getter: obj => obj.name, ... }`
 If `outputFull` is set to `true`, output the matched `subject` too.
-If the search array isn't an array of string but an array of random objects, it is necessary to provide a getter method allowing to extract the searched string from the object:
+
+If the search subject isn't an array of string, but for example `[{ product: 'Banana', price: 1.23 }, { product: 'Meat', price: 10.67 }]`, you will have to provide a getter function. This function allow the engine to extract the right string for each of the objects of the array.
 
 For example:
 ```javascript
@@ -96,7 +98,7 @@ ff.search('baaa', data, {
 
 ### Performing a search on a list of values
 ```javascript
-search(needle, haystack, options = {});
+search(string needle, array haystack [, options = {}])
 ```
 It is probably the most useful method of the class, it searches the dataset and return the matches.
 
@@ -106,9 +108,9 @@ If it is an array of objects, the `getter` method has to be set to allow the eng
 
 ### Finding out whether a string matches another
 ```javascript
-match(search, string, options = {});
+match(string search, string subject [, options = {}])
 ```
-It is the method used by `search`. It returns `false` if there is no match, or a `match object` if there is a match.
+It is the method used by `search`. It returns `false` if there is no match, or a match object if there is a match.
 
 ```javascript
 ff.match('foo', 'foobar'); // -> { text: 'foobar', score: 123 }
@@ -120,8 +122,8 @@ ff.match('baz', 'foobar', { highlight: true }); // -> false
 
 ### Setting the opening/closing tags
 ```javascript
-new fuzzyfinder(openTag = '<b>', closeTag = '</b>');
-ff.setOpenTag(tag);
-ff.setCloseTag(tag);
+constructor(string openTag = '<b>', string closeTag = '</b>')
+ff.setOpenTag(string tag)
+ff.setCloseTag(string tag)
 ```
 The tags can be set at the moment the finder is instantiated or after that with the two setters.
