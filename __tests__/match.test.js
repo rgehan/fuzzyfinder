@@ -14,8 +14,8 @@ test("'foo' does not match ''", () => {
   expect(ff.match('foo', '')).toBe(false);
 });
 
-test("'abc' does not match 'foobar'", () => {
-  expect(ff.match('abc', 'foobar')).toBe(false);
+test("'baz' does not match 'foobar'", () => {
+  expect(ff.match('baz', 'foobar')).toBe(false);
 });
 
 test("'foo' matches 'foobarbaz'", () => {
@@ -37,7 +37,7 @@ test("'baz' matches 'foobarbaz'", () => {
 });
 
 /*
- * Basic behavior with outputFull option
+ * Basic behavior with outputFull option & object subjects
  */
 test("Should not output subject", () => {
   let results = ff.match('baaa', { product: 'Banana', price: 1.23 }, {
@@ -77,12 +77,10 @@ test("'foo' matches array ['foobar', 'baz']", () => {
   });
 });
 
-test("'baaa' matches object { product: 'Banana', price: 1.23 }", () => {
-  expect(ff.match('baaa', { product: 'Banana', price: 1.23 }, {
-    getter: obj => obj.product,
-  })).toMatchObject({
-    text: 'Banana',
-  });
+test("'foo' does not match array ['barbaz', 'bazbar']", () => {
+  expect(ff.match('foo', ['barbaz', 'bazbar'], {
+    getter: arr => arr[0],
+  })).toBe(false);
 });
 
 /*
@@ -102,5 +100,19 @@ test("'fbb' highlights 'foobarbaz' properly", () => {
     highlight: true,
   })).toMatchObject({
     text: '<f>oo<b>ar<b>az',
+  });
+});
+
+test("'baaa' should match & highlight { product: 'Banana', price: 1.23 }", () => {
+  expect(ff.match('baaa', { product: 'Banana', price: 1.23 }, {
+    highlight: true,
+    outputFull: true,
+    getter: obj => obj.product,
+  })).toMatchObject({
+    text: '<B><a>n<a>n<a>',
+    subject: {
+      product: 'Banana',
+      price: 1.23,
+    },
   });
 });
