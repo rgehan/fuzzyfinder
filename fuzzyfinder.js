@@ -78,10 +78,26 @@ class FuzzyFinder {
                   .map(obj => obj.text);
   }
 
+  /**
+   * Compute the score of the match (the smaller the better) based
+   * on the position of the match and the amount of unmatched characters
+   *
+   * Scoring algorithm from http://github.com/farzher/fuzzysort which is
+   * better because it takes the position of the match into account
+   */
   computeScore(string, indices) {
-    return 1;
+    let unmatchedChar = string.length - indices.length;
+    let groupsOffset = indices.reduce((acc, v, i) => {
+      return i > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
+    }, 0);
+
+    return unmatchedChar + groupsOffset;
   }
 
+  /**
+   * Wrap any matched character with the open/close tags on each of the
+   * passed string.
+   */
   computeHighlight(string, indices) {
     return string.split('')
                  .map((c, i) => indices.indexOf(i) != -1 ? `${this.OPEN_TAG}${c}${this.CLOSE_TAG}` : c)
