@@ -27,7 +27,18 @@ const data = [
 // Perform a search
 let results = ff.search('abs', data);
 
-// -> ['<b>a</b><b>b</b><b>s</b>olute', '<b>a</b><b>b</b><b>s</b>olutely', ... ]
+/*
+ * Output:
+ * [{
+ *   score: 123,
+ *   text: '<b>a</b><b>b</b><b>s</b>olute'
+ * }, {
+ *   score: 123,
+ *   text: '<b>a</b><b>b</b><b>s</b>olutely'
+ * }, {
+ *   ...
+ * }]
+ */
 ```
 
 ## API
