@@ -1,12 +1,12 @@
 {
   "name": "fuzzyfinder",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Renan GEHAN (@rgehan)",
   "main": "dist/fuzzyfinder.js",
   "license": "MIT",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/rgehan/fuzzyfinder.git"
+    "type": "git",
+    "url": "https://github.com/rgehan/fuzzyfinder.git"
   },
   "scripts": {
     "build": "babel fuzzyfinder.js --out-file dist/fuzzyfinder.js",
