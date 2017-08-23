@@ -75,7 +75,7 @@ class FuzzyFinder {
 
     return results.sort((a, b) => a.score - b.score)
                   .filter(obj => obj.score > 0)
-                  .map(obj => `${obj.text} (${obj.score})`);
+                  .map(obj => obj.text);
   }
 
   computeScore(string, indices) {
