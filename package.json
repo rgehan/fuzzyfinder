@@ -1,6 +1,6 @@
 {
   "name": "fuzzyfinder",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Renan GEHAN (@rgehan)",
   "main": "dist/fuzzyfinder.js",
   "license": "MIT",
