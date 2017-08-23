@@ -1,6 +1,6 @@
 import FuzzyFinder from '../fuzzyfinder';
 
-let ff = new FuzzyFinder();
+let ff = new FuzzyFinder('<', '>');
 
 test("'foo' should match ['foobar', 'barbaz', 'foobaz']", () => {
   expect(ff.search('foo', ['foobar', 'barbaz', 'foobaz'], false)).toBe(true);

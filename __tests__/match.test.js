@@ -1,6 +1,10 @@
 import FuzzyFinder from '../fuzzyfinder';
 
-let ff = new FuzzyFinder();
+let ff = new FuzzyFinder('<', '>');
+
+/*
+ * Boolean behavior
+ */
 
 test("'' does not match 'foobar'", () => {
   expect(ff.match('', 'foobar', false)).toBe(false);
@@ -24,4 +28,16 @@ test("'abc' matches 'abecedaire'", () => {
 
 test("'abc' matches 'foobarabc'", () => {
   expect(ff.match('abc', 'foobarabc', false)).toBe(true);
+});
+
+/*
+ * Highlighting behavior
+ */
+
+test("'bar' highlights 'foobarbaz' properly", () => {
+  expect(ff.match('bar', 'foobarbaz').text).toBe('foo<b><a><r>baz');
+});
+
+test("'fbb' highlights 'foobarbaz' properly", () => {
+  expect(ff.match('fbb', 'foobarbaz').text).toBe('<f>oo<b>ar<b>az');
 });

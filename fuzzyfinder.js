@@ -1,7 +1,16 @@
 
 class FuzzyFinder {
-  constructor() {
+  constructor(openTag = '<b>', closeTag = '</b>') {
+    this.setOpenTag(openTag);
+    this.setCloseTag(closeTag);
+  }
 
+  setOpenTag(tag) {
+    this.OPEN_TAG = tag;
+  }
+
+  setCloseTag(tag) {
+    this.CLOSE_TAG = tag;
   }
 
   /**
@@ -70,11 +79,13 @@ class FuzzyFinder {
   }
 
   computeScore(string, indices) {
-
+    return 1;
   }
 
   computeHighlight(string, indices) {
-
+    return string.split('')
+                 .map((c, i) => indices.indexOf(i) != -1 ? `${this.OPEN_TAG}${c}${this.CLOSE_TAG}` : c)
+                 .join('');
   }
 };
 
