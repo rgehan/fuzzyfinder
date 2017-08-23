@@ -42,9 +42,16 @@ var FuzzyFinder = function () {
 
   }, {
     key: 'match',
-    value: function match(search, string) {
-      var shouldHighlight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+    value: function match(search, subject) {
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
+      // Eventually extract the search field if there is a need
+      var getter = options.getter || function (val) {
+        return val;
+      };
+      var string = getter(subject);
+
+      // Early return in easy cases
       if (!search.length || !string.length) return false;
 
       // To prevent false-negative due to leading/trailing spaces
@@ -67,7 +74,7 @@ var FuzzyFinder = function () {
 
         // We reached the end of the search string and matched
         // every character
-        if (currentIndex == search.length) return this.buildSearchResult(string, matchesIndices, shouldHighlight);
+        if (currentIndex == search.length) return this.buildSearchResult(subject, matchesIndices, options);
       }
 
       return false;
@@ -79,13 +86,25 @@ var FuzzyFinder = function () {
 
   }, {
     key: 'buildSearchResult',
-    value: function buildSearchResult(string, matchesIndices) {
-      var shouldHighlight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+    value: function buildSearchResult(subject, matchesIndices) {
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-      return {
+      var getter = options.getter || function (val) {
+        return val;
+      };
+      var shouldHighlight = options.highlight || false;
+      var shouldOutputFull = options.outputFull || false;
+
+      var string = getter(subject);
+
+      var res = {
         score: this.computeScore(string, matchesIndices),
         text: shouldHighlight ? this.computeHighlight(string, matchesIndices) : string
       };
+
+      if (shouldOutputFull) res.subject = subject;
+
+      return res;
     }
 
     /**
@@ -98,16 +117,17 @@ var FuzzyFinder = function () {
     value: function search(needle, haystack) {
       var _this = this;
 
-      var shouldHighlight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-      return haystack.map(function (str) {
-        return _this.match(needle, str, shouldHighlight);
-      }).sort(function (a, b) {
+      return haystack.map(function (subject) {
+        return _this.match(needle, subject, options);
+      }).filter(function (_) {
+        return _;
+      }) // Remove falsy results
+      .sort(function (a, b) {
         return a.score - b.score;
       }).filter(function (obj) {
         return obj.score > 0;
-      }).map(function (obj) {
-        return obj.text;
       });
     }
 
