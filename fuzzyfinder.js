@@ -41,12 +41,8 @@ class FuzzyFinder {
 
       // We reached the end of the search string and matched
       // every character
-      if(currentIndex == search.length) {
-        if(!shouldHighlight)
-        	return true;
-
-        return this.buildSearchResult(string, matchesIndices);
-      }
+      if(currentIndex == search.length)
+        return this.buildSearchResult(string, matchesIndices, shouldHighlight);
     }
 
     return false;
@@ -55,10 +51,10 @@ class FuzzyFinder {
   /**
    * Highlight and compute the score of a given match
    */
-  buildSearchResult(string, matchesIndices) {
+  buildSearchResult(string, matchesIndices, shouldHighlight = true) {
     return {
       score: this.computeScore(string, matchesIndices),
-      text: this.computeHighlight(string, matchesIndices),
+      text: shouldHighlight ? this.computeHighlight(string, matchesIndices) : string,
     };
   }
 
@@ -67,15 +63,10 @@ class FuzzyFinder {
    * eventually highlights the matches
    */
   search(needle, haystack, shouldHighlight = true) {
-    let results = haystack.map(str => this.match(needle, str, shouldHighlight));
-
-    // If no highlighting is required, indicates if there's a match
-    if(!shouldHighlight)
-      return results.some(el => !!el);
-
-    return results.sort((a, b) => a.score - b.score)
-                  .filter(obj => obj.score > 0)
-                  .map(obj => obj.text);
+    return haystack.map(str => this.match(needle, str, shouldHighlight))
+                   .sort((a, b) => a.score - b.score)
+                   .filter(obj => obj.score > 0)
+                   .map(obj => obj.text);
   }
 
   /**

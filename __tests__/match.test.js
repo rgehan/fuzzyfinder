@@ -18,16 +18,16 @@ test("'abc' does not match 'foobar'", () => {
   expect(ff.match('abc', 'foobar', false)).toBe(false);
 });
 
-test("'abc' matches 'abcdefg'", () => {
-  expect(ff.match('abc', 'abcdefg', false)).toBe(true);
+test("'foo' matches 'foobarbaz'", () => {
+  expect(ff.match('foo', 'foobarbaz', false)).toMatchObject({ text: 'foobarbaz' });
 });
 
-test("'abc' matches 'abecedaire'", () => {
-  expect(ff.match('abc', 'abecedaire', false)).toBe(true);
+test("'fbb' matches 'foobarbaz'", () => {
+  expect(ff.match('fbb', 'foobarbaz', false)).toMatchObject({ text: 'foobarbaz' });
 });
 
-test("'abc' matches 'foobarabc'", () => {
-  expect(ff.match('abc', 'foobarabc', false)).toBe(true);
+test("'baz' matches 'foobarbaz'", () => {
+  expect(ff.match('baz', 'foobarbaz', false)).toMatchObject({ text: 'foobarbaz' });
 });
 
 /*

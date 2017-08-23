@@ -7,15 +7,18 @@ let ff = new FuzzyFinder('<', '>');
  */
 
 test("'foo' should match ['foobar', 'barbaz', 'foobaz']", () => {
-  expect(ff.search('foo', ['foobar', 'barbaz', 'foobaz'], false)).toBe(true);
+  expect(ff.search('foo', ['foobar', 'barbaz', 'foobaz'], false)).toEqual([
+    'foobar',
+    'foobaz'
+  ]);
 });
 
 test("'foo' should not match ['barbaz', 'bazbar']", () => {
-  expect(ff.search('foo', ['barbaz', 'bazbar'], false)).toBe(false);
+  expect(ff.search('foo', ['barbaz', 'bazbar'], false)).toEqual([]);
 });
 
 test("'foo' should not match []", () => {
-  expect(ff.search('foo', [], false)).toBe(false);
+  expect(ff.search('foo', [], false)).toEqual([]);
 });
 
 /*
