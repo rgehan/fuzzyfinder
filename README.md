@@ -32,26 +32,78 @@ let results = ff.search('abs', data);
 
 ## API
 
+### Methods configuration
+A configuration object can be passed to both `search` and `match` methods:
+```javascript
+{
+  highlight: false, // Generate the highlighted subject ?
+  outputFull: true, // Output the whole subject ?
+  getter: obj => obj.name, // The getter method allowing to extract the string from the subject
+}
+```
+
+#### `{ highlight: true, ... }`
+Enables the highlighting on the output.
+Only the `text` field will be applied, the `subject` object, if passed, will be passed unaltered.
+
+#### `{ outputFull: true, getter: obj => obj.name, ... }`
+If `outputFull` is set to `true`, output the matched `subject` too.
+If the search array isn't an array of string but an array of random objects, it is necessary to provide a getter method allowing to extract the searched string from the object:
+
+For example:
+```javascript
+let data = [{ product: 'Banana', price: 1.23 }, { product: 'Meat', price: 10.67 }];
+
+ff.search('baaa', data, {
+  outputFull: true,
+  getter: obj => obj.product,
+});
+
+/* Outputs:
+ * [{
+ *   score: 123,
+ *   text: 'Banana',
+ *   subject: {
+ *     product: 'Banana',
+ *     price: 1.23
+ *   }
+ * }]
+ */
+
+ ff.search('baaa', data, {
+   outputFull: false,
+   getter: obj => obj.product,
+ });
+
+ /* Outputs:
+  * [{
+  *   score: 123,
+  *   text: 'Banana'
+  * }]
+  */
+```
+
 ### Performing a search on a list of values
 ```javascript
-search(needle, haystack, shouldHighlight = true);
+search(needle, haystack, options = {});
 ```
-It is probably the most useful method of the class, it searches the dataset and wrap each match with the specified tags.
+It is probably the most useful method of the class, it searches the dataset and return the matches.
 
-`shouldHighlight` controls whether or not the matches are wrapped or not.
+`haystack` can be an array of string, or an array of objects.
+If it is an array of objects, the `getter` method has to be set to allow the engine to know on what field of the object to search.
 
 
 ### Finding out whether a string matches another
 ```javascript
-match(search, string, shouldHighlight = true);
+match(search, string, options = {});
 ```
-It is the method used by `search`. It returns `false` if there is no match, or a match object if there is a match.
+It is the method used by `search`. It returns `false` if there is no match, or a `match object` if there is a match.
 
 ```javascript
-ff.match('foo', 'foobar', false); // -> { text: 'foobar' }
-ff.match('baz', 'foobar', false); // -> false
-ff.match('foo', 'foobar', true); // -> { text: '<b>f</b><b>o</b><b>o</b>bar' }
-ff.match('baz', 'foobar', true); // -> false
+ff.match('foo', 'foobar'); // -> { text: 'foobar', score: 123 }
+ff.match('baz', 'foobar'); // -> false
+ff.match('foo', 'foobar', { highlight: true }); // -> { text: '<f><o><o>bar', score: 123 }
+ff.match('baz', 'foobar', { highlight: true }); // -> false
 ```
 
 
