@@ -4,6 +4,10 @@
   "author": "Renan GEHAN (@rgehan)",
   "main": "dist/fuzzyfinder.js",
   "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/rgehan/fuzzyfinder.git"
+  },
   "scripts": {
     "build": "babel fuzzyfinder.js --out-file dist/fuzzyfinder.js",
     "watch": "babel fuzzyfinder.js --watch --out-file dist/fuzzyfinder.js",
