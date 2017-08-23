@@ -1,6 +1,7 @@
 # [fuzzyfinder](https://github.com/rgehan/fuzzyfinder)
 
 This is a tiny fuzzyfinder-like search engine.
+There is an [example react app](https://github.com/rgehan/fuzzyfinder-example-app) demonstrating the module.
 
 ## Installation
 ```bash
