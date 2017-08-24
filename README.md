@@ -1,11 +1,15 @@
 # [fuzzyfinder](https://github.com/rgehan/fuzzyfinder)
 
-This is a tiny fuzzyfinder-like search engine.
+
+Fuzzyfinder allows to search a dataset with partial input. It also handles the highlighting of the matches. 
+
+It is similar to the file search feature of Sublime Text or Atom.
+
 There is an [example react app](https://github.com/rgehan/fuzzyfinder-example-app) demonstrating the module.
 
 ## Installation
 ```bash
-$ npm install fuzzyfinder # or yarn install fuzzyfinder
+$ npm install fuzzyfinder # or yarn add fuzzyfinder
 ```
 
 ## Usage
