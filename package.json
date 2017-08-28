@@ -12,7 +12,9 @@
     "build": "babel fuzzyfinder.js --out-file dist/fuzzyfinder.js",
     "watch": "babel fuzzyfinder.js --watch --out-file dist/fuzzyfinder.js",
     "test": "jest",
-    "prepublishOnly": "npm run build"
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist/",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
