@@ -145,11 +145,11 @@ var FuzzyFinder = function () {
       var unmatchedChar = string.length - indices.length;
 
       var spreadPenalty = indices.reduce(function (acc, v, i) {
-        return v > 1 && indices[i - 1] != v - 1 ? acc + 1000 : acc;
+        return i > 1 && indices[i - 1] != v - 1 ? acc + 1000 : acc;
       }, 0);
 
       var groupsOffsetsPenalty = indices.reduce(function (acc, v, i) {
-        return v > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
+        return i > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
       }, 0);
 
       return unmatchedChar + spreadPenalty + groupsOffsetsPenalty;

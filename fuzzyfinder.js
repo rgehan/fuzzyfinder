@@ -96,11 +96,11 @@ class FuzzyFinder {
     let unmatchedChar = string.length - indices.length;
 
     let spreadPenalty = indices.reduce((acc, v, i) => {
-      return v > 1 && indices[i - 1] != v - 1 ? acc + 1000 : acc
+      return i > 1 && indices[i - 1] != v - 1 ? acc + 1000 : acc
     }, 0);
 
     let groupsOffsetsPenalty = indices.reduce((acc, v, i) => {
-      return v > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
+      return i > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
     }, 0);
 
     return unmatchedChar + spreadPenalty + groupsOffsetsPenalty;
