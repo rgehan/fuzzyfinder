@@ -143,11 +143,16 @@ var FuzzyFinder = function () {
     key: 'computeScore',
     value: function computeScore(string, indices) {
       var unmatchedChar = string.length - indices.length;
-      var groupsOffset = indices.reduce(function (acc, v, i) {
-        return i > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
+
+      var spreadPenalty = indices.reduce(function (acc, v, i) {
+        return v > 1 && indices[i - 1] != v - 1 ? acc + 1000 : acc;
       }, 0);
 
-      return unmatchedChar + groupsOffset;
+      var groupsOffsetsPenalty = indices.reduce(function (acc, v, i) {
+        return v > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
+      }, 0);
+
+      return unmatchedChar + spreadPenalty + groupsOffsetsPenalty;
     }
 
     /**
