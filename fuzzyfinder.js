@@ -95,7 +95,7 @@ class FuzzyFinder {
   computeScore(string, indices) {
     let unmatchedChar = string.length - indices.length;
     let groupsOffset = indices.reduce((acc, v, i) => {
-      return i > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
+      return v > 1 && indices[i - 1] != v - 1 ? acc + 1000 * indices[i] : acc;
     }, 0);
 
     return unmatchedChar + groupsOffset;
